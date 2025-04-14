@@ -6,8 +6,6 @@ import { CreateNoteHandler } from './modules/tasks/application/command/create-no
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  console.log(app.select(NoteModule).get(CreateNoteHandler));
-
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

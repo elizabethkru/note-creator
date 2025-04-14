@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-// import { NoteSchema } from 'src/modules/tasks/infrastructure/schemas/note.schema';
 import * as dotenv from 'dotenv';
 import { registerAs } from '@nestjs/config';
+import { NoteSchema } from 'src/modules/tasks/infrastructure/schemas/note.schema';
 dotenv.config();
 
 export const typeormConfig = {
@@ -11,10 +11,10 @@ export const typeormConfig = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  synchronize: true,
   logging: true,
-  entities: [],
-  // migrations: ['src/migrations/*.ts'],
+  synchronize: true,
+  entities: [NoteSchema], // Добавьте сюда вашу схему
+  migrations: ['src/migrations/*.ts'],
 };
 
 export default registerAs('typeorm', () => typeormConfig);

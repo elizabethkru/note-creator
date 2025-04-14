@@ -4,7 +4,7 @@ import { NoteModule } from 'src/modules/tasks/note.module';
 import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  controllers: [NoteController, CqrsModule],
-  imports: [NoteModule],
+  controllers: [NoteController],
+  imports: [NoteModule, CqrsModule.forRoot()],
 })
 export class ApiModule {}

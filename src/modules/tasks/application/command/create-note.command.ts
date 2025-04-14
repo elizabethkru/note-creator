@@ -8,7 +8,9 @@ import { CreateNoteBoundaries } from '../ports/boundaries/create-note.boundaries
 import { Inject } from '@nestjs/common';
 
 export class CreateNoteCommand {
-  constructor(public readonly data: CreateNoteBoundaries.Input) {}
+  constructor(public readonly data: CreateNoteBoundaries.Input) {
+    console.log('CreateNoteHandler initialized');
+  }
 }
 
 @CommandHandler(CreateNoteCommand)
