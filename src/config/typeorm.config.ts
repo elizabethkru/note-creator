@@ -13,7 +13,7 @@ export const typeormConfig = {
   autoLoadEntities: true,
   logging: true,
   synchronize: true,
-  entities: [] as string[], // Добавьте сюда вашу схему
+  entities: [] as string[],
 };
 
 export default registerAs('typeorm', () => typeormConfig);

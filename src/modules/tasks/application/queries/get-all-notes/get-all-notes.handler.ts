@@ -20,14 +20,18 @@ export class GetAllNoteQueryHandler implements IQueryHandler<GetAllNoteQuery> {
       return { notes: [], count: 0 };
     }
 
+    const activeNotes = notes.filter(
+      (note) => note.isDeleted == query.filters?.includeDeleted,
+    );
+
     return {
-      notes: notes.map((note) => ({
+      notes: activeNotes.map((note) => ({
         id: note.uuid.toString(),
         title: note.title.getTitle(),
         content: note.content.getContent(),
         createdAt: note.createdAt.toISOString(),
       })),
-      count: notes.length,
+      count: activeNotes.length,
     };
   }
 }
