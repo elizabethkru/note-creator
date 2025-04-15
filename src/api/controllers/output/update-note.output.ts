@@ -7,7 +7,7 @@ import {
   IsNotEmpty,
 } from 'class-validator';
 
-export class CreateNoteOutput {
+export class UpdateNoteOutput {
   @Expose()
   @IsUUID()
   @IsNotEmpty()
@@ -25,4 +25,5 @@ export class CreateNoteOutput {
   content: string;
 
   createdAt: string;
+  updatedAt: string;
 }

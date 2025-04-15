@@ -1,7 +1,7 @@
-import { NoteAggregate } from '../../tasks/tasks.aggregate';
-import { NoteUuid } from '../../tasks/value-objects/note-uuid';
-import { NoteTitle } from '../../tasks/value-objects/note-title';
-import { NoteContent } from '../../tasks/value-objects/note-content';
+import { NoteAggregate } from 'src/modules/tasks/domain/tasks.aggregate';
+import { NoteUuid } from '../../domain/value-objects/note-uuid';
+import { NoteTitle } from '../../domain/value-objects/note-title';
+import { NoteContent } from '../../domain/value-objects/note-content';
 import { EntitySchema } from 'typeorm';
 
 export const NoteSchema = new EntitySchema<NoteAggregate>({

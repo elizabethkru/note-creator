@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-export namespace CreateNoteBoundaries {
+export namespace UpdateNoteBoundaries {
   export interface Input {
+    id: string;
     title: string;
     content: string;
   }
@@ -10,5 +11,6 @@ export namespace CreateNoteBoundaries {
     title: string;
     content: string;
     createdAt: string;
+    updatedAt: string;
   }
 }

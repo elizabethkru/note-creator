@@ -1,5 +1,5 @@
-import { NoteAggregate } from '../../tasks/tasks.aggregate';
-import { NoteUuid } from '../../tasks/value-objects/note-uuid';
+import { NoteAggregate } from '../../domain/tasks.aggregate';
+import { NoteUuid } from '../../domain/value-objects/note-uuid';
 
 export interface INoteRepository {
   save(domain: NoteAggregate): Promise<NoteAggregate>;
