@@ -3,6 +3,7 @@ import { NoteUuid } from '../../domain/value-objects/note-uuid';
 import { NoteTitle } from '../../domain/value-objects/note-title';
 import { NoteContent } from '../../domain/value-objects/note-content';
 import { EntitySchema } from 'typeorm';
+import { UserUuid } from 'src/modules/users/domain/value-objects/user-uuid';
 
 export const NoteSchema = new EntitySchema<NoteAggregate>({
   name: 'Note',
@@ -29,6 +30,14 @@ export const NoteSchema = new EntitySchema<NoteAggregate>({
       transformer: {
         to: (value: NoteContent) => value.getContent(),
         from: (value: string) => new NoteContent(value),
+      },
+    },
+    userUuid: {
+      type: 'uuid',
+      name: 'user_uuid',
+      transformer: {
+        to: (value: UserUuid) => value.toString(),
+        from: (value: string) => new UserUuid(value),
       },
     },
     isDeleted: {

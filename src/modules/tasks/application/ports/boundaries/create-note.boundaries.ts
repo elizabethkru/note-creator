@@ -3,6 +3,7 @@ export namespace CreateNoteBoundaries {
   export interface Input {
     title: string;
     content: string;
+    userId: string;
   }
 
   export interface Output {

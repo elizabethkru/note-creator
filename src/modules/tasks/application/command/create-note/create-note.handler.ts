@@ -6,6 +6,7 @@ import { INoteRepository } from '../../ports/note-repository.interface';
 import { CreateNoteBoundaries } from '../../ports/boundaries/create-note.boundaries';
 import { Inject } from '@nestjs/common';
 import { CreateNoteCommand } from './create-note.command';
+import { UserUuid } from 'src/modules/users/domain/value-objects/user-uuid';
 
 @CommandHandler(CreateNoteCommand)
 export class CreateNoteHandler implements ICommandHandler<CreateNoteCommand> {
@@ -22,8 +23,9 @@ export class CreateNoteHandler implements ICommandHandler<CreateNoteCommand> {
   ): Promise<CreateNoteBoundaries.Output> {
     const noteTitle = new NoteTitle(command.data.title);
     const noteContent = new NoteContent(command.data.content);
+    const userUuid = new UserUuid(command.data.userId);
 
-    const note = NoteAggregate.create(noteTitle, noteContent);
+    const note = NoteAggregate.create(noteTitle, noteContent, userUuid);
     this.eventPublisher.mergeObjectContext(await this.repository.save(note));
 
     // note.commit();

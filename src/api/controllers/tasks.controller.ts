@@ -7,6 +7,8 @@ import {
   Put,
   Delete,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -25,13 +27,19 @@ import {
   ApiResponse,
   ApiQuery,
   ApiParam,
+  ApiBearerAuth,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CreateNoteOutput } from './output/create-note.output';
 import { GetNoteOutput } from './output/get-note.output';
 import { UpdateNoteOutput } from './output/update-note.output';
 import { DeleteNoteOutput } from './output/delete-note.output';
 import { GetAllNoteQuery } from 'src/modules/tasks/application/queries/get-all-notes/get-all-notes.query';
+import { AuthGuard } from '@nestjs/passport';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
+@ApiUnauthorizedResponse({ description: 'Необходима авторизация' })
 @ApiTags('Notes Management')
 @Controller('note')
 export class NoteController {
@@ -41,6 +49,7 @@ export class NoteController {
   ) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
     summary: 'Создать заметку',
     description: 'Создает новую заметку с указанным заголовком и содержанием',
@@ -75,11 +84,19 @@ export class NoteController {
     status: 400,
     description: 'Невалидные данные',
   })
-  async createNote(@Body() body: CreateNoteDto): Promise<any> {
+  async createNote(
+    @Body() body: CreateNoteDto,
+    @Req()
+    req: {
+      sub: string;
+      login: string;
+    },
+  ): Promise<any> {
     return await this.commandBus.execute(
       new CreateNoteCommand({
         title: body.title,
         content: body.content,
+        userId: req.sub,
       }),
     );
   }
