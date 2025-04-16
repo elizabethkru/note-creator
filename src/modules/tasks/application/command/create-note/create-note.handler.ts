@@ -14,9 +14,7 @@ export class CreateNoteHandler implements ICommandHandler<CreateNoteCommand> {
     @Inject('INoteRepository')
     private readonly repository: INoteRepository,
     private readonly eventPublisher: EventPublisher,
-  ) {
-    console.log('CreateNoteHandler dependencies initialized');
-  }
+  ) {}
 
   async execute(
     command: CreateNoteCommand,
@@ -26,15 +24,14 @@ export class CreateNoteHandler implements ICommandHandler<CreateNoteCommand> {
     const userUuid = new UserUuid(command.data.userId);
 
     const note = NoteAggregate.create(noteTitle, noteContent, userUuid);
-    this.eventPublisher.mergeObjectContext(await this.repository.save(note));
+    const savedNote = await this.repository.save(note);
+    this.eventPublisher.mergeObjectContext(savedNote);
 
-    // note.commit();
-    console.log(34124124);
     return {
-      id: note.uuid.toString(),
-      title: note.title.getTitle(),
-      content: note.content.getContent(),
-      createdAt: note.updatedAt.toISOString(),
+      id: savedNote.uuid.toString(),
+      title: savedNote.title.getTitle(),
+      content: savedNote.content.getContent(),
+      createdAt: savedNote.updatedAt.toISOString(),
     };
   }
 }

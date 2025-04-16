@@ -26,7 +26,7 @@ export class AuthService {
 
   async login(user: UserAggregate) {
     const payload = {
-      sub: user.uuid.toString(),
+      sub: user.uuid,
       login: user.login.toString(),
     };
 

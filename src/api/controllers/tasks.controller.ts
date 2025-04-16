@@ -36,6 +36,7 @@ import { UpdateNoteOutput } from './output/update-note.output';
 import { DeleteNoteOutput } from './output/delete-note.output';
 import { GetAllNoteQuery } from 'src/modules/tasks/application/queries/get-all-notes/get-all-notes.query';
 import { AuthGuard } from '@nestjs/passport';
+import { UserAggregate } from 'src/modules/users/domain/user.aggregate';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
@@ -86,17 +87,14 @@ export class NoteController {
   })
   async createNote(
     @Body() body: CreateNoteDto,
-    @Req()
-    req: {
-      sub: string;
-      login: string;
-    },
+    @Req() req: Request & { user: UserAggregate },
   ): Promise<any> {
+    console.log('User ID из токена:', req.user.uuid);
     return await this.commandBus.execute(
       new CreateNoteCommand({
         title: body.title,
         content: body.content,
-        userId: req.sub,
+        userId: req.user.uuid.toString(),
       }),
     );
   }
