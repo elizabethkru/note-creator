@@ -13,4 +13,8 @@ export namespace GetNoteBoundaries {
     notes: Output[];
     count: number;
   }
+
+  export interface InputUserUuid {
+    userUuid: string;
+  }
 }

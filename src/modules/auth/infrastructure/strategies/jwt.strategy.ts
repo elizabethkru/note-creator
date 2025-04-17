@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { IUserRepository } from 'src/modules/users/application/ports/user-repository.interface';
-import { UserAggregate } from 'src/modules/users/domain/user.aggregate';
 import { UserUuid } from 'src/modules/users/domain/value-objects/user-uuid';
 
 @Injectable()
@@ -20,7 +19,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: string }): Promise<UserAggregate | null> {
-    return this.userRepository.getUserById(new UserUuid(payload.sub));
+  async validate(payload: { sub: string }) {
+    try {
+      return await this.userRepository.getUserById(
+        new UserUuid(payload.sub), // Теперь payload.sub - строка
+      );
+    } catch (e) {
+      throw new UnauthorizedException('Invalid user ID in token');
+    }
   }
 }

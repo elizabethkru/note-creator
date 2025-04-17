@@ -19,7 +19,7 @@ export class AuthController {
     const user = await this.commandBus.execute(
       new CreateUserCommand({ login: body.login, password: body.password }),
     );
-    console.log(user.role);
+    console.log(user);
     return this.authService.login(user);
   }
 
@@ -29,6 +29,7 @@ export class AuthController {
     const user = await this.authService.validateUser(body.login, body.password);
     if (!user) throw new UnauthorizedException();
 
+    console.log(user);
     return this.authService.login(user);
   }
 }

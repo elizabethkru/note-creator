@@ -6,6 +6,7 @@ import { NoteSchema } from '../schemas/note.schema';
 import { NoteUuid } from '../../domain/value-objects/note-uuid';
 import { INoteRepository } from '../../application/ports/note-repository.interface';
 import { BaseRepository } from 'src/modules/shared/ifrastructure/repositories/base.repository';
+import { UserUuid } from 'src/modules/users/domain/value-objects/user-uuid';
 
 @Injectable()
 export class NoteRepository
@@ -23,6 +24,12 @@ export class NoteRepository
   async getNoteById(uuid: NoteUuid): Promise<NoteAggregate | null> {
     return await this.manager.findOne(NoteAggregate, {
       where: { uuid: uuid.toString() },
+    });
+  }
+
+  async getNoteByUserUuId(uuid: UserUuid): Promise<NoteAggregate[]> {
+    return await this.manager.find(NoteAggregate, {
+      where: { userUuid: uuid.toString() },
     });
   }
 

@@ -40,6 +40,7 @@ import { UserAggregate } from 'src/modules/users/domain/user.aggregate';
 import { Roles } from 'src/modules/auth/infrastructure/decorators/roles.decorator';
 import { UserRole } from 'src/modules/users/domain/user-role.enum';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
+import { GetNoteByUserUuidQuery } from 'src/modules/tasks/application/queries/get-note-by-userUid/get-note-by-userUuid.query';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
@@ -144,6 +145,44 @@ export class NoteController {
     return this.queryBus.execute(
       new GetAllNoteQuery({
         includeDeleted: includeDeleted === true,
+      }),
+    );
+  }
+
+  @ApiOkResponse({
+    type: [GetNoteOutput],
+  })
+  @Get('user')
+  @Roles(UserRole.USER)
+  @UseGuards(RolesGuard)
+  @ApiOperation({
+    summary: 'Получить заметку по ID пользователя',
+    description: 'Возвращает заметку по указанному идентификатору юзера',
+  })
+  @ApiOkResponse({
+    type: GetNoteOutput,
+    description: 'Заметка найдена',
+    examples: {
+      example1: {
+        value: {
+          id: '550e8400-e29b-41d4-a716-446655440000',
+          title: 'Важная заметка',
+          content: 'Содержание заметки',
+          createdAt: '2023-05-15T10:00:00Z',
+        },
+        summary: '',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Заметка не найдена',
+  })
+  async getNoteByUserUuid(@Req() req: Request & { user: UserAggregate }) {
+    const userid = req.user.uuid.uuid;
+    return this.queryBus.execute(
+      new GetNoteByUserUuidQuery({
+        userUuid: userid,
       }),
     );
   }
