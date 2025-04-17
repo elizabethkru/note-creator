@@ -3,6 +3,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { CreateUserCommand } from 'src/modules/users/application/command/create-user/create-user.command';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { Public } from 'src/modules/auth/infrastructure/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -12,14 +13,18 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @Public()
   async register(@Body() body: RegisterUserDto) {
+    console.log('tuututututu');
     const user = await this.commandBus.execute(
       new CreateUserCommand({ login: body.login, password: body.password }),
     );
+    console.log(user.role);
     return this.authService.login(user);
   }
 
   @Post('login')
+  @Public()
   async login(@Body() body: RegisterUserDto) {
     const user = await this.authService.validateUser(body.login, body.password);
     if (!user) throw new UnauthorizedException();

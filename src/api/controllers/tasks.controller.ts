@@ -37,6 +37,9 @@ import { DeleteNoteOutput } from './output/delete-note.output';
 import { GetAllNoteQuery } from 'src/modules/tasks/application/queries/get-all-notes/get-all-notes.query';
 import { AuthGuard } from '@nestjs/passport';
 import { UserAggregate } from 'src/modules/users/domain/user.aggregate';
+import { Roles } from 'src/modules/auth/infrastructure/decorators/roles.decorator';
+import { UserRole } from 'src/modules/users/domain/user-role.enum';
+import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
@@ -50,7 +53,8 @@ export class NoteController {
   ) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @Roles(UserRole.USER)
+  @UseGuards(RolesGuard)
   @ApiOperation({
     summary: 'Создать заметку',
     description: 'Создает новую заметку с указанным заголовком и содержанием',
@@ -100,6 +104,8 @@ export class NoteController {
   }
 
   @Get()
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @ApiOperation({
     summary: 'Получить все заметки',
     description: 'Возвращает список всех заметок с возможностью фильтрации',

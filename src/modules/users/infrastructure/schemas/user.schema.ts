@@ -3,6 +3,7 @@ import { UserAggregate } from '../../domain/user.aggregate';
 import { UserUuid } from '../../domain/value-objects/user-uuid';
 import { UserLogin } from '../../domain/value-objects/user-login';
 import { HashedPassword } from 'src/modules/auth/domain/value-objects/hashed-password';
+import { UserRole } from '../../domain/user-role.enum';
 
 export const UsersSchema = new EntitySchema<UserAggregate>({
   name: 'Users',
@@ -32,6 +33,11 @@ export const UsersSchema = new EntitySchema<UserAggregate>({
         to: (value: HashedPassword) => value.toString(),
         from: (value: string) => new HashedPassword(value),
       },
+    },
+    role: {
+      type: 'enum',
+      enum: UserRole,
+      default: UserRole.USER,
     },
     createdAt: {
       type: 'timestamptz',
