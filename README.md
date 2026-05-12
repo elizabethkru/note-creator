@@ -46,11 +46,11 @@ Note Creator — это серверное API-приложение для со�
 
 Создайте в корне файл `.env` с переменными окружения (пример):
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=ваш_пароль
-DB_DATABASE=note_creator_db
+- DB_HOST=localhost
+- DB_PORT=5432
+- DB_USERNAME=postgres
+- DB_PASSWORD=ваш_пароль
+- DB_DATABASE=note_creator_db
 
 Укажите свои параметры доступа к PostgreSQL.
 
